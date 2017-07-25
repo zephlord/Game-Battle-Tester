@@ -12,30 +12,46 @@ public class AttributeAddField : MonoBehaviour {
 	private Dropdown _typeSelect;
 	private Type _type;
 	[SerializeField]
-	private List<AttributeCreationRefinementView> _attributeRefinementFields;
+	private List<GameObject> _attributeRefinementFields;
+	//private List<AttributeCreationRefinementView> _attributeRefinementFields;
+
+	private bool hasUpdated;
 
 	void Start()
 	{
-		List<Dropdown.OptionData> displayData = new List<Dropdown.OptionData>();
-		foreach(KeyValuePair<Type, string> val in GlobalConstants.ATTRIBUTE_DISPLAY_TYPES)
+		OnValueChanged(_typeSelect.value);
+
+	}
+
+	void Update()
+	{
+		if(!hasUpdated)
 		{
-			displayData.Add(new Dropdown.OptionData(val.Value));
+			List<Dropdown.OptionData> displayData = new List<Dropdown.OptionData>();
+		foreach(Type type in GlobalConstants.POSSIBLE_ATTRIBUTE_TYPES)
+		{
+			displayData.Add(new Dropdown.OptionData(GlobalConstants.ATTRIBUTE_DISPLAY_TYPES[type]));
 		}
 		_typeSelect.options = displayData;
 		_typeSelect.onValueChanged.AddListener(OnValueChanged);
-
+		}
+		hasUpdated = true;
 	}
 
 
 	void OnValueChanged(int value)
 	{
-		Type selectedType = GlobalConstants.ATTRIBUTE_DISPLAY_TYPES[value].Key;
-		foreach(AttributeCreationRefinementView view in _attributeRefinementFields)
+		for(int i = 0; i < _attributeRefinementFields.Count; i++)
 		{
-			if(view.GetViewType == selectedType)
-				view.View.SetActive(true);
-			else
-				view.View.SetActive(false);
+			_attributeRefinementFields[i].SetActive(i == value);
 		}
+		// Type selectedType = GlobalConstants.POSSIBLE_ATTRIBUTE_TYPES[value];
+		// foreach(AttributeCreationRefinementView view in _attributeRefinementFields)
+		// {
+		// 	if(view.GetViewType == selectedType)
+		// 		view.View.SetActive(true);
+		// 	else
+		// 		view.View.SetActive(false);
+		// }
 	}
 }

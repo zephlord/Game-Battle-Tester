@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Map<T1, T2> : List<KeyValuePair<T1, T2>>
+public class Map<T1, T2> : List<KeyValuePair<T1,T2>>, IEnumerable 
 {
     private Dictionary<T1, T2> _forward = new Dictionary<T1, T2>();
     private Dictionary<T2, T1> _reverse = new Dictionary<T2, T1>();
@@ -11,6 +11,23 @@ public class Map<T1, T2> : List<KeyValuePair<T1, T2>>
     {
         this.Forward = new Indexer<T1, T2>(_forward);
         this.Reverse = new Indexer<T2, T1>(_reverse);
+    }
+
+    public Map(List<KeyValuePair<T1, T2>> data)
+    {
+        foreach(KeyValuePair<T1,T2> pair in data)
+        {
+            _forward.Add(pair.Key, pair.Value);
+            _reverse.Add(pair.Value, pair.Key);
+        }
+
+        this.Forward = new Indexer<T1, T2>(_forward);
+        this.Reverse = new Indexer<T2, T1>(_reverse);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return _forward.GetEnumerator();
     }
 
     public class Indexer<T3, T4>

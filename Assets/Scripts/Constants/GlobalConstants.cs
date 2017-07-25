@@ -10,7 +10,7 @@ public static class GlobalConstants
 	{
 		typeof(int), typeof(string), typeof(Enum)
 	};
-	public static Map<Type, string> ATTRIBUTE_DISPLAY_TYPES = new Map<Type, string>()
+	public static Dictionary<Type, string> ATTRIBUTE_DISPLAY_TYPES = new Dictionary<Type, string>()
 	{
 		{typeof(int), "int"},
 		{typeof(string), "string"},
